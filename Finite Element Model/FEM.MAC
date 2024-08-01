@@ -1,0 +1,104 @@
+!...School of Civil Engineering, Central South University
+!...H.P.Duan, hpduan2000@csu.edu.cn
+!...https://www.hpduan.cn
+!...2024-06-01 01:47:42
+!********************************************************************
+*USE, define_userCS.MAC
+FINISH
+/CLEAR
+/PREP7
+/TITLE, High-speed Railway Deck Arch Bridge (HSRDAB)
+!*******************Arch bridge basic parameters*********************
+PI = ACOS(-1)                    ! Pi
+GLFGJJ = 7.5                     ! Design drawing
+SXGHD = 19                       ! Design drawing
+XXGHD = 18                       ! Design drawing
+NQ = 5.2374                      ! Design drawing
+GJJJ = 20                        ! Design drawing
+GDJJ = 9                         ! Design drawing
+!**********************Track basic parameters************************
+ZLL = 300                        ! Length of girder of 300 m
+ZLH = 2.882                      ! Height of girder of 2.882 m
+ZZH = 0.2                        ! Height of bearing of 0.2 m
+KJJZ = 0.75                      ! Spacing of spring element of 0.75 m
+HDCH = 0.006                     ! Thinkness of sliding layer of 0.006 m
+DZBH = 0.19                      ! Thinkness of base plate of 0.19 m
+SJCH = 0.03                      ! Thinkness of CA mortar layer of 0.03 m
+GDBH = 0.2                       ! Thinkness of track plate of 0.2 m
+GGZXJ = 1.435                    ! Transverse spacing of rail lines of 1.435 m
+GGGD = 0.176                     ! Height of rail of 0.176 m
+LF = 0.1                         ! Length of girder gap of 0.1 m
+MCBL = 52.5                      ! Length of friction plate of 52.5 m
+!*******************Material Nonlinear Behavior**********************
+!...Ignore nonlinear behavior       : MNB = 0
+!...Elastic-Perfect-Plastic behavior: MNB = 1
+!...Multilinear F-D relationship    : MNB = 2
+MNB = 2
+!***************Set parameters for seismic analysis******************
+!...number of modes
+MODENUM = 20
+!...input ground motion
+dtime = 0.01
+btime = 0.01
+etime = 10.01
+NPTS = etime/dtime
+*DIM,GroundMotion,TABLE,NPTS,100
+*VREAD,GroundMotion(1,0),TIME,MAC
+(E16.6)
+*VREAD,GroundMotion(1,1),GM_X,MAC
+(E16.6)
+*VREAD,GroundMotion(1,2),GM_Y,MAC
+(E16.6)
+*VREAD,GroundMotion(1,3),GM_Z,MAC
+(E16.6)
+*VPLOT,GroundMotion(1,0),GroundMotion(1,1),2,3
+!...acceleration of gravity
+g = 9.806
+!...The excitation direction of ground motion (EDGM): 
+!...three-direction for (x+y+z)   : EDGM = 1
+!...two-direction for (x+z)       : EDGM = 2
+!...two-direction for (y+z)       : EDGM = 3
+EDGM = 1
+
+!...travelling wave effect
+! twv = 1000
+! ap = NINT(((138.75-(-138.75))/twv)/dtime)
+
+!****************************Modelling*******************************
+*USE, define_material.MAC        ! Define material
+*USE, define_element.MAC         ! Define element
+*USE, define_realconstant.MAC    ! Define real constant: force-displacement curve for nonlinear spring
+*USE, define_crosssection.MAC    ! Define cross section
+*USE, build_archrib.MAC          ! Build arch-rib
+*USE, build_webmember.MAC        ! Build arch-web member
+*USE, build_column.MAC           ! Build arch-steel column
+*USE, build_girder.MAC           ! Build arch-girder
+*USE, build_bearing.MAC          ! Build arch-bearing
+*USE, build_baseplate.MAC        ! Build arch-base plate
+*USE, build_slidinglayer.MAC     ! Build arch-sliding layer
+*USE, build_trackplate.MAC       ! Build arch-track plate
+*USE, build_mortarlayer.MAC      ! Build arch-CA mortar layer
+*USE, build_rail.MAC             ! Build arch-rail
+*USE, build_fastener.MAC         ! Build arch-fastener
+*USE, build_block.MAC            ! Build arch-transverse block
+*USE, build_groove.MAC           ! Build arch-shear groove
+*USE, build_rebar.MAC            ! Build arch-shear rebar
+*USE, build_leftabutment.MAC     ! Build left abutment
+*USE, build_leftfriction.MAC     ! Build left friction plate
+*USE, build_rightabutment.MAC    ! Build right abutment
+*USE, build_rightfriction.MAC    ! Build right friction plate
+*USE, build_terminalspine.MAC    ! Build terminal spine
+*USE, build_boundry.MAC          ! Build boundry constrain
+*USE, set_modalanalysis.MAC      ! Set modal analysis
+*USE, set_nonlinearanalysis.MAC  ! Set nonlinear analysis
+*USE, set_postprocess.MAC        ! Set post process
+!****************************References******************************
+! --> https://onlinelibrary.wiley.com/doi/abs/10.1002/eqe.3763
+! --> https://doi.org/10.1007/s10518-021-01125-w
+! --> https://www.sciencedirect.com/science/article/pii/S0267726120304358
+! --> https://doi.org/10.1007/s10518-019-00779-x
+! --> https://www.sciencedirect.com/science/article/pii/S0141029622010653
+! --> https://www.sciencedirect.com/science/article/pii/S0267726119309066
+! --> https://onlinelibrary.wiley.com/doi/abs/10.1002/eqe.407
+! --> https://www.mm.bme.hu/~gyebro/files/ans_help_v182/ans_cmd/
+! --> https://doi.org/10.1016/j.soildyn.2024.108811 
