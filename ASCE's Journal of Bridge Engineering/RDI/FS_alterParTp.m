@@ -50,9 +50,9 @@ writematrix(num2str(acc_5_95,'%16.6E'), [path,'GM_Y.txt'])
 %%
 function [PSA_ANR, PSV_ANR, a_ANR] = FS_alterPar_Tp(Tp)
     % ..........(1) 读取地震波从peer
-    path = 'D:\HPduan\FD and FS pulse\FD-5\';
-    fileName_acc = 'RSN1529_CHICHI_TCU102-E.AT2';
-    fileName_vel = 'RSN1529_CHICHI_TCU102-E.VT2';
+    path = 'D:\HPduan\FD and FS pulse\FS-3\';
+    fileName_acc = 'RSN1148_KOCAELI_ARE090.AT2';
+    fileName_vel = 'RSN1148_KOCAELI_ARE090.VT2';
     [acc_series, dt, ~, ~] = getAmpDtPEER(path, fileName_acc);
     [vel_series, ~, ~, ~] = getAmpDtPEER(path, fileName_vel);
     
